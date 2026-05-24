@@ -275,17 +275,14 @@ Issue #3 should create fixtures based on this matrix.
 
 | Fixture path | Purpose | Expected lint |
 | --- | --- | --- |
-| `fixtures/valid/codex-running.md` | Known provider active run with all required fields. | No findings. |
-| `fixtures/valid/claude-code-needs-review.md` | Review state with artifacts and source thread. | No findings. |
-| `fixtures/valid/manual-parked.md` | Manual parked run with `check: null`. | No findings. |
-| `fixtures/valid/chatgpt-done.md` | Completed provider run with `check: null`. | No findings. |
-| `fixtures/warnings/unknown-provider.md` | Valid custom provider. | `W100`. |
-| `fixtures/warnings/active-check-overdue.md` | Active run with past check time. | `W111`. |
-| `fixtures/warnings/index-missing-link.md` | Valid run omitted from dashboard. | `W130`. |
-| `fixtures/errors/bad-status.md` | Invalid status. | `E012`. |
-| `fixtures/errors/missing-heading.md` | Missing required body section. | `E030`. |
-| `fixtures/errors/artifacts-scalar.md` | `artifacts` is a scalar. | `E031`. |
-| `fixtures/errors/duplicate-id-a.md` and `fixtures/errors/duplicate-id-b.md` | Duplicate ids across files. | `E014`. |
+| `fixtures/valid/basic-workspace` | Valid registry covering Codex, Claude Code, ChatGPT, Cursor, Manus, and manual runs. | No findings. |
+| `fixtures/warnings/unknown-provider` | Valid custom provider. | `W100`. |
+| `fixtures/warnings/active-check-overdue` | Active run with past check time relative to the fixture clock. | `W111`. |
+| `fixtures/warnings/index-missing-link` | Valid run omitted from dashboard. | `W130`. |
+| `fixtures/errors/bad-status` | Invalid status. | `E012`. |
+| `fixtures/errors/missing-heading` | Missing required body section. | `E030`. |
+| `fixtures/errors/artifacts-scalar` | `artifacts` is a scalar. | `E031`. |
+| `fixtures/errors/duplicate-id` | Duplicate ids across files. | `E014`, plus `E015` for the copy whose filename cannot match the duplicate id. |
 
 ## JSON Export Guidance
 

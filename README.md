@@ -67,6 +67,7 @@ Planned UI:
 - [Schema contract](docs/schema-contract.md)
 - [Status transitions](docs/status-transitions.md)
 - [Workspace contract template](templates/agents/schema.md)
+- [Fixtures](fixtures/README.md)
 - [Roadmap](ROADMAP.md)
 - [Contributing](CONTRIBUTING.md)
 
