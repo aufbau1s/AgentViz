@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Project roadmap
+    url: https://github.com/aufbau1s/AgentViz/blob/main/ROADMAP.md
+    about: Check the planned milestones before opening large scope requests.

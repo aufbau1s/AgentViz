@@ -1,0 +1,35 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs and caches
+*.log
+.cache/
+.tmp/
+tmp/
+temp/
+
+# Common dependency and build outputs
+node_modules/
+dist/
+build/
+coverage/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# AgentViz generated exports
+agents/export.json
+agents/*.export.json
