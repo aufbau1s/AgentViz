@@ -160,7 +160,7 @@ Examples:
 | `parked` | No | Intentionally paused. | May be `null`; if present, it is a planned revisit time. |
 | `done` | No | Completed and no longer active. | Should be `null`. |
 
-Detailed transition rules will be defined separately, but schema validation should already enforce that `status` is one of these values.
+Detailed transition rules are defined in [Status Transitions](status-transitions.md). Schema validation should enforce that `status` is one of these values before any transition rules are applied.
 
 ## Required Body Sections
 
@@ -254,6 +254,12 @@ AgentViz linting should use three severities:
 | `W130` | Run file is not linked from `agents/index.md`. |
 | `W140` | `Timeline` section is empty or has entries without timestamps. |
 | `W150` | Body `Next Action` appears to disagree with frontmatter `next_action`. |
+| `W160` | Status transition is suspicious but recoverable. |
+| `W161` | `done` run appears to have been reopened without an explicit reason in the timeline. |
+| `W162` | `needs-review` run has neither artifacts nor a meaningful `Result / Output` summary. |
+| `W163` | `blocked` run does not name a blocker in `Current State` or `Handoff Notes`. |
+| `W164` | `parked` run does not explain what would make it worth resuming. |
+| `W165` | `done` run still has `Result / Output` set to `Pending`. |
 
 ### Info
 

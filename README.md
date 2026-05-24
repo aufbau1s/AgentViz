@@ -65,6 +65,7 @@ Planned UI:
 - [Vision](docs/vision.md)
 - [Architecture](docs/architecture.md)
 - [Schema contract](docs/schema-contract.md)
+- [Status transitions](docs/status-transitions.md)
 - [Roadmap](ROADMAP.md)
 - [Contributing](CONTRIBUTING.md)
 
