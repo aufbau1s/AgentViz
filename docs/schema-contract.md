@@ -28,7 +28,7 @@ Human-readable dashboard for active work. It should link to run notes and may be
 
 ### `agents/schema.md`
 
-Workspace-local operating contract for humans and LLMs. It should be generated from this repository's schema contract and may include project-specific guidance.
+Workspace-local operating contract for humans and LLMs. It should be generated from this repository's schema contract, using [the workspace contract template](../templates/agents/schema.md) as its starting point, and may include project-specific guidance.
 
 ### `agents/log.md`
 

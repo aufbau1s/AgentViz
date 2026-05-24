@@ -41,7 +41,7 @@ One file per agent run or thread. Each file contains YAML frontmatter plus fixed
 
 ### `agents/schema.md`
 
-The operating contract for humans and LLMs. It explains required fields, statuses, headings, update rules, lint rules, and handoff expectations.
+The operating contract for humans and LLMs. It explains required fields, statuses, headings, update rules, lint rules, and handoff expectations. The future `agentviz init` command should create it from `templates/agents/schema.md`.
 
 ### `agents/log.md`
 
