@@ -20,17 +20,26 @@ Thanks for helping shape AgentViz. The project is young, so design clarity matte
 
 ## Development Workflow
 
-The implementation stack is not finalized yet. Until then, contribution work should focus on:
+AgentViz uses TypeScript on Node.js for the V0 CLI and shared registry core.
 
-- schema proposals,
-- fixtures,
-- docs,
-- architecture notes,
-- issue refinement,
-- CLI/runtime tradeoff analysis,
-- UI information architecture.
+Install dependencies and run the basic checks with:
 
-Once implementation starts, this file will be updated with local setup, test, lint, and release commands.
+```sh
+npm install
+npm test
+npm run lint
+npm run format:check
+npm run typecheck
+npm run build
+```
+
+Run the development CLI with:
+
+```sh
+npm run dev -- --help
+```
+
+Early implementation work should stay aligned with the documented registry contract and existing fixtures. Include tests when changing parsing, validation, status transitions, export behavior, or command behavior.
 
 ## Architecture Decisions
 

@@ -18,14 +18,33 @@ AgentViz aims to make agent work inspectable, portable, and maintainable:
 
 ## Project Status
 
-AgentViz is in project foundation mode. The first milestone is to finalize the Markdown registry contract before implementation begins.
+AgentViz is in early implementation mode. The Markdown registry contract is drafted, and the current milestone is the V0 CLI core.
 
 Current focus:
 
-- Define the run schema.
-- Define the LLM operating contract.
-- Create fixture workspaces.
-- Design the CLI and UI around the Markdown source of truth.
+- Build the TypeScript CLI foundation.
+- Parse and validate AgentViz Markdown workspaces.
+- Implement `agentviz init`, `agentviz new`, and `agentviz status`.
+- Keep future UI behavior aligned with the same registry model.
+
+## Local Development
+
+AgentViz uses TypeScript on Node.js. Use Node.js 20 or newer.
+
+```sh
+npm install
+npm test
+npm run lint
+npm run format:check
+npm run typecheck
+npm run build
+```
+
+Run the development CLI with:
+
+```sh
+npm run dev -- --help
+```
 
 ## Planned V0 Interfaces
 
