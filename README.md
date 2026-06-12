@@ -103,6 +103,7 @@ Planned UI:
 - [Architecture](docs/architecture.md)
 - [Schema contract](docs/schema-contract.md)
 - [Status transitions](docs/status-transitions.md)
+- [JSON export](docs/json-export.md)
 - [Workspace contract template](templates/agents/schema.md)
 - [Fixtures](fixtures/README.md)
 - [Roadmap](ROADMAP.md)

@@ -1,7 +1,8 @@
 import path from "node:path";
+import { buildJsonExport } from "./export.js";
 import { initWorkspace } from "./init.js";
 import { readRegistry } from "./registry.js";
-import { STATUSES, type Finding, type Registry } from "./types.js";
+import { STATUSES, type Finding } from "./types.js";
 import { summarizeRun, validateRegistry } from "./validation.js";
 
 export async function runInit(workspace = "."): Promise<number> {
@@ -99,16 +100,6 @@ export async function runExport(workspace = ".", json = false): Promise<number> 
 
   console.log(JSON.stringify(exportValue, null, 2));
   return 0;
-}
-
-export function buildJsonExport(registry: Registry, findings: Finding[]): unknown {
-  return {
-    schemaVersion: 0,
-    workspaceRoot: registry.workspaceRoot,
-    generatedAt: new Date().toISOString(),
-    runs: registry.runs.map(summarizeRun),
-    findings
-  };
 }
 
 function groupFindingsByRun(findings: Finding[]): Map<string, Finding[]> {

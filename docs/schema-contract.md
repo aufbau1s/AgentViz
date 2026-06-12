@@ -288,7 +288,7 @@ Issue #3 should create fixtures based on this matrix.
 
 JSON export is derived data. The Markdown registry remains canonical.
 
-The eventual export should include:
+The export contract is defined in [JSON Export](json-export.md). It includes:
 
 - normalized frontmatter,
 - parsed body sections,
