@@ -58,6 +58,8 @@ Show run status:
 npm run dev -- status fixtures/valid/basic-workspace
 ```
 
+When warnings exist, `agentviz status` surfaces an `Attention` block for overdue checks and next-action issues before the grouped status list.
+
 Validate a workspace:
 
 ```sh

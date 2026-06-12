@@ -28,6 +28,13 @@ assert(
   "status output should include needs-review group"
 );
 
+const warningStatusOutput = runCli(["status", "fixtures/warnings/active-check-overdue"]);
+assert(
+  warningStatusOutput.includes("Attention"),
+  "status should include attention block for warnings"
+);
+assert(warningStatusOutput.includes("overdue-checks (1)"), "status should surface overdue checks");
+
 const initWorkspace = mkdtempSync(path.join(tmpdir(), "agentviz-smoke-init-"));
 try {
   const initOutput = runCli(["init", initWorkspace]);

@@ -26,10 +26,37 @@ export async function runStatus(workspace = "."): Promise<number> {
   const findings = validateRegistry(registry);
   const runs = registry.runs.map(summarizeRun);
   const findingsByRun = groupFindingsByRun(findings);
+  const overdueRuns = runs.filter((run) => hasFinding(findingsByRun, run.id, ["W111"]));
+  const nextActionRuns = runs.filter((run) => hasFinding(findingsByRun, run.id, ["W112", "W150"]));
 
   if (runs.length === 0) {
     console.log("No AgentViz runs found.");
   } else {
+    if (overdueRuns.length > 0 || nextActionRuns.length > 0) {
+      console.log("Attention");
+
+      if (overdueRuns.length > 0) {
+        console.log(`overdue-checks (${overdueRuns.length})`);
+
+        for (const run of overdueRuns) {
+          console.log(`  - ${run.id} | ${run.status} | check overdue: ${run.check ?? "none"}`);
+        }
+
+        console.log("");
+      }
+
+      if (nextActionRuns.length > 0) {
+        console.log(`next-action-issues (${nextActionRuns.length})`);
+
+        for (const run of nextActionRuns) {
+          const reasons = summarizeFindings(findingsByRun.get(run.id) ?? [], ["W112", "W150"]);
+          console.log(`  - ${run.id} | ${run.status} | next: ${run.next_action} | ${reasons}`);
+        }
+
+        console.log("");
+      }
+    }
+
     for (const status of STATUSES) {
       const runsForStatus = runs.filter((run) => run.status === status);
 
@@ -114,4 +141,25 @@ function groupFindingsByRun(findings: Finding[]): Map<string, Finding[]> {
   }
 
   return grouped;
+}
+
+function hasFinding(
+  findingsByRun: Map<string, Finding[]>,
+  runId: string,
+  codes: string[]
+): boolean {
+  const runFindings = findingsByRun.get(runId) ?? [];
+  return runFindings.some((finding) => codes.includes(finding.code));
+}
+
+function summarizeFindings(findings: Finding[], codes: string[]): string {
+  const labelsByCode = new Map<string, string>([
+    ["W112", "placeholder next action"],
+    ["W150", "body/frontmatter mismatch"]
+  ]);
+
+  return findings
+    .filter((finding) => codes.includes(finding.code))
+    .map((finding) => labelsByCode.get(finding.code) ?? finding.code)
+    .join(", ");
 }
