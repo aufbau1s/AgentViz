@@ -18,14 +18,14 @@ AgentViz aims to make agent work inspectable, portable, and maintainable:
 
 ## Project Status
 
-AgentViz is in early implementation mode. The Markdown registry contract is drafted, and the current milestone is the V0 CLI core.
+AgentViz is in early implementation mode. The Markdown registry contract, MVP CLI path, JSON export contract, and local UI information architecture are drafted.
 
 Current focus:
 
-- Build the TypeScript CLI MVP.
-- Parse and validate AgentViz Markdown workspaces.
-- Implement `agentviz init`, `agentviz status`, `agentviz lint`, and `agentviz export --json`.
-- Keep future UI behavior aligned with the same registry model.
+- Dogfood AgentViz with the repo-root `agents/` workspace.
+- Use the CLI to lint and export the committed registry.
+- Turn the local UI information architecture into a first read-only MVP.
+- Prepare the v0.1 release checklist from real dogfood output.
 
 ## Local Development
 
@@ -70,6 +70,14 @@ Export machine-readable JSON:
 npm run dev -- export --json fixtures/valid/basic-workspace
 ```
 
+Inspect this repo's dogfood workspace:
+
+```sh
+npm run dev -- status .
+npm run dev -- lint .
+npm run dev -- export --json .
+```
+
 Canonical workspace layout:
 
 ```text
@@ -105,7 +113,9 @@ Planned UI:
 - [Status transitions](docs/status-transitions.md)
 - [JSON export](docs/json-export.md)
 - [Local UI information architecture](docs/local-ui.md)
+- [Dogfooding workflow](docs/dogfooding.md)
 - [Workspace contract template](templates/agents/schema.md)
+- [Repo dogfood dashboard](agents/index.md)
 - [Fixtures](fixtures/README.md)
 - [Roadmap](ROADMAP.md)
 - [Contributing](CONTRIBUTING.md)
