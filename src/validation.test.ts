@@ -12,8 +12,10 @@ describe("validateRegistry", () => {
 
   it.each([
     ["fixtures/warnings/unknown-provider", "W100"],
+    ["fixtures/warnings/unknown-provider", "W120"],
     ["fixtures/warnings/active-check-overdue", "W111"],
-    ["fixtures/warnings/index-missing-link", "W130"]
+    ["fixtures/warnings/index-missing-link", "W130"],
+    ["fixtures/warnings/index-missing-link", "W150"]
   ])("emits warning code %s -> %s", async (fixturePath, expectedCode) => {
     const findings = await validateFixture(fixturePath);
 
