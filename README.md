@@ -104,6 +104,7 @@ Planned UI:
 - [Schema contract](docs/schema-contract.md)
 - [Status transitions](docs/status-transitions.md)
 - [JSON export](docs/json-export.md)
+- [Local UI information architecture](docs/local-ui.md)
 - [Workspace contract template](templates/agents/schema.md)
 - [Fixtures](fixtures/README.md)
 - [Roadmap](ROADMAP.md)

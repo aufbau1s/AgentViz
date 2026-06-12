@@ -63,13 +63,15 @@ The CLI should:
 
 The UI should:
 
-- read the registry,
+- consume generated JSON from `agentviz export --json`,
 - show a status board,
 - show a timeline,
 - filter by provider and project,
 - highlight lint warnings,
 - render run details from Markdown,
 - avoid becoming the only way to understand the data.
+
+The V0 UI information architecture is documented in [Local UI Information Architecture](local-ui.md).
 
 ## Future Adapter Responsibilities
 
