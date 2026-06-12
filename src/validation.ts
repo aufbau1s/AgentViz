@@ -404,9 +404,12 @@ function validateStatusSpecificRules(run: ParsedRunNote): Finding[] {
   const id = stringField(run, "id");
   const status = stringField(run, "status");
   const nextAction = stringField(run, "next_action") ?? "";
+  const sourceThread = nullableStringField(run, "source_thread");
+  const provider = stringField(run, "provider");
   const artifacts = run.frontmatter["artifacts"];
   const resultOutput = run.sectionsByHeading.get("Result / Output")?.content.trim() ?? "";
   const currentState = run.sectionsByHeading.get("Current State")?.content.trim() ?? "";
+  const bodyNextAction = run.sectionsByHeading.get("Next Action")?.content.trim() ?? "";
   const handoffNotes = run.sectionsByHeading.get("Handoff Notes")?.content.trim() ?? "";
 
   if (nextAction.length > 0 && PLACEHOLDER_PATTERN.test(nextAction)) {
@@ -414,6 +417,30 @@ function validateStatusSpecificRules(run: ParsedRunNote): Finding[] {
       code: "W112",
       severity: "warning",
       message: "Run has a placeholder next_action.",
+      file: run.sourcePath,
+      runId: id
+    });
+  }
+
+  if (provider && provider !== "manual" && isMissingOrPlaceholder(sourceThread)) {
+    findings.push({
+      code: "W120",
+      severity: "warning",
+      message: "Provider run has a null or placeholder source_thread reference.",
+      file: run.sourcePath,
+      runId: id
+    });
+  }
+
+  if (
+    nextAction.length > 0 &&
+    bodyNextAction.length > 0 &&
+    normalizeComparableText(nextAction) !== normalizeComparableText(bodyNextAction)
+  ) {
+    findings.push({
+      code: "W150",
+      severity: "warning",
+      message: "Body Next Action does not match frontmatter next_action.",
       file: run.sourcePath,
       runId: id
     });
@@ -539,4 +566,16 @@ function isNullableString(value: unknown): value is string | null {
 
 function isTimestamp(value: string): boolean {
   return TIMESTAMP_PATTERN.test(value) && !Number.isNaN(Date.parse(value));
+}
+
+function isMissingOrPlaceholder(value: string | null): boolean {
+  return value === null || PLACEHOLDER_PATTERN.test(value.trim());
+}
+
+function normalizeComparableText(value: string): string {
+  return value
+    .trim()
+    .replace(/[.!?]+$/g, "")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
 }

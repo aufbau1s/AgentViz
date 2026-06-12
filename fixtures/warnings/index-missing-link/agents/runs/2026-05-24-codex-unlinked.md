@@ -34,7 +34,7 @@ Pending.
 
 ## Next Action
 
-Link this run from the dashboard.
+Review the exported JSON before linking this run from the dashboard.
 
 ## Artifacts
 
@@ -46,4 +46,4 @@ None yet.
 
 ## Handoff Notes
 
-The expected warning is `W130`.
+The expected warnings are `W130` and `W150`.

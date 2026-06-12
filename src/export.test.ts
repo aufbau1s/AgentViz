@@ -63,19 +63,27 @@ describe("buildJsonExport", () => {
     const exported = buildJsonExport(registry, findings, new Date("2026-06-12T00:00:00Z"));
 
     expect(exported.summary).toMatchObject({
-      findingCount: 1,
+      findingCount: 2,
       errorCount: 0,
-      warningCount: 1
+      warningCount: 2
     });
-    expect(exported.findings).toEqual([
-      expect.objectContaining({
-        code: "W100",
-        severity: "warning",
-        runId: "2026-05-24-local-agent-running",
-        sourcePath: "agents/runs/2026-05-24-local-agent-running.md"
-      })
-    ]);
+    expect(exported.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "W100",
+          severity: "warning",
+          runId: "2026-05-24-local-agent-running",
+          sourcePath: "agents/runs/2026-05-24-local-agent-running.md"
+        }),
+        expect.objectContaining({
+          code: "W120",
+          severity: "warning",
+          runId: "2026-05-24-local-agent-running",
+          sourcePath: "agents/runs/2026-05-24-local-agent-running.md"
+        })
+      ])
+    );
     expect(exported.findings[0]?.sourceAbsolutePath).toContain("2026-05-24-local-agent-running.md");
-    expect(exported.runs[0]?.findings).toHaveLength(1);
+    expect(exported.runs[0]?.findings).toHaveLength(2);
   });
 });

@@ -10,7 +10,7 @@ updated: 2026-05-24T15:50:00-04:00
 check: 2026-05-24T18:00:00-04:00
 next_action: Finish local-provider smoke notes
 human_owner: aufbau1s
-source_thread: local-agent:fixture-unknown-provider
+source_thread: null
 artifacts: []
 ---
 
@@ -26,7 +26,7 @@ Track a provider value that AgentViz does not know yet.
 
 ## Current State
 
-The run is valid except for the unknown provider warning.
+The run is valid except for the unknown provider warning and missing thread reference.
 
 ## Result / Output
 
@@ -46,4 +46,4 @@ None yet.
 
 ## Handoff Notes
 
-The expected warning is `W100`.
+The expected warnings are `W100` and `W120`.
