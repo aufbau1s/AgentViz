@@ -22,9 +22,9 @@ AgentViz is in early implementation mode. The Markdown registry contract is draf
 
 Current focus:
 
-- Build the TypeScript CLI foundation.
+- Build the TypeScript CLI MVP.
 - Parse and validate AgentViz Markdown workspaces.
-- Implement `agentviz init`, `agentviz new`, and `agentviz status`.
+- Implement `agentviz init`, `agentviz status`, `agentviz lint`, and `agentviz export --json`.
 - Keep future UI behavior aligned with the same registry model.
 
 ## Local Development
@@ -33,11 +33,7 @@ AgentViz uses TypeScript on Node.js. Use Node.js 20 or newer.
 
 ```sh
 npm install
-npm test
-npm run lint
-npm run format:check
-npm run typecheck
-npm run build
+npm run verify
 ```
 
 Run the development CLI with:
@@ -46,7 +42,33 @@ Run the development CLI with:
 npm run dev -- --help
 ```
 
-## Planned V0 Interfaces
+The verification command runs formatting, linting, typechecking, unit tests, build, and built-CLI smoke tests.
+
+## MVP CLI
+
+Initialize a workspace:
+
+```sh
+npm run dev -- init ./my-workspace
+```
+
+Show run status:
+
+```sh
+npm run dev -- status fixtures/valid/basic-workspace
+```
+
+Validate a workspace:
+
+```sh
+npm run dev -- lint fixtures/valid/basic-workspace
+```
+
+Export machine-readable JSON:
+
+```sh
+npm run dev -- export --json fixtures/valid/basic-workspace
+```
 
 Canonical workspace layout:
 
@@ -59,17 +81,13 @@ agents/
     example-run.md
 ```
 
-Planned CLI:
+## Planned V0 Interfaces
 
-```text
-agentviz init
-agentviz new
-agentviz status
-agentviz lint
-agentviz park
-agentviz done
-agentviz export --json
-```
+Additional planned CLI commands:
+
+- `agentviz new`
+- `agentviz park`
+- `agentviz done`
 
 Planned UI:
 
