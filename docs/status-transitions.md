@@ -8,41 +8,41 @@ For example, a Codex thread may no longer be literally executing, but its AgentV
 
 ## Status Definitions
 
-| Status | Meaning |
-| --- | --- |
-| `queued` | Captured as work to start, but no agent or human has begun execution yet. |
-| `running` | An agent or human is actively working, or the run is expected to continue without new direction. |
-| `needs-review` | There is output to inspect before deciding whether it is accepted, revised, or continued. |
-| `needs-redirect` | The run needs a new prompt, scope change, clarification, or strategic decision. |
-| `blocked` | The run cannot proceed because of an external dependency, missing access, failing command, unavailable information, or unresolved decision. |
-| `parked` | Intentionally paused. Not urgent, not active, and not necessarily failed. |
-| `done` | Complete enough that no further action is expected for this run. |
+| Status           | Meaning                                                                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `queued`         | Captured as work to start, but no agent or human has begun execution yet.                                                                   |
+| `running`        | An agent or human is actively working, or the run is expected to continue without new direction.                                            |
+| `needs-review`   | There is output to inspect before deciding whether it is accepted, revised, or continued.                                                   |
+| `needs-redirect` | The run needs a new prompt, scope change, clarification, or strategic decision.                                                             |
+| `blocked`        | The run cannot proceed because of an external dependency, missing access, failing command, unavailable information, or unresolved decision. |
+| `parked`         | Intentionally paused. Not urgent, not active, and not necessarily failed.                                                                   |
+| `done`           | Complete enough that no further action is expected for this run.                                                                            |
 
 ## Normal Transitions
 
 These are the normal V0 transitions. Tools should allow them without override when the required update fields are supplied.
 
-| From | Allowed next statuses |
-| --- | --- |
-| `queued` | `running`, `blocked`, `parked`, `done` |
-| `running` | `needs-review`, `needs-redirect`, `blocked`, `parked`, `done` |
-| `needs-review` | `running`, `needs-redirect`, `blocked`, `parked`, `done` |
-| `needs-redirect` | `running`, `blocked`, `parked`, `done` |
-| `blocked` | `running`, `needs-redirect`, `parked`, `done` |
-| `parked` | `queued`, `running`, `needs-redirect`, `done` |
-| `done` | No normal transitions. Prefer creating a new run unless the close was a mistake. |
+| From             | Allowed next statuses                                                            |
+| ---------------- | -------------------------------------------------------------------------------- |
+| `queued`         | `running`, `blocked`, `parked`, `done`                                           |
+| `running`        | `needs-review`, `needs-redirect`, `blocked`, `parked`, `done`                    |
+| `needs-review`   | `running`, `needs-redirect`, `blocked`, `parked`, `done`                         |
+| `needs-redirect` | `running`, `blocked`, `parked`, `done`                                           |
+| `blocked`        | `running`, `needs-redirect`, `parked`, `done`                                    |
+| `parked`         | `queued`, `running`, `needs-redirect`, `done`                                    |
+| `done`           | No normal transitions. Prefer creating a new run unless the close was a mistake. |
 
 ## Suspicious Transitions
 
 Some transitions are readable but suspicious. Future tools may allow them with an explicit reason or override flag.
 
-| Transition | Why suspicious |
-| --- | --- |
-| `done` to any active status | A completed run is expected to be terminal. Create a new run unless the original close was mistaken. |
-| `queued` to `needs-review` | There should be output before review is needed. Use `running` first unless importing an already-complete provider thread. |
-| `queued` to `needs-redirect` | A run usually needs an initial attempt before redirect. Use this only when triage discovers the original prompt is unusable. |
-| `blocked` to `needs-review` | A blocked run normally resumes or needs redirect before review. Use only when the blocker resolution produced reviewable output. |
-| `parked` to `blocked` | A parked run should usually be resumed before becoming blocked. Use `needs-redirect` if the first action is to decide what to do next. |
+| Transition                   | Why suspicious                                                                                                                         |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `done` to any active status  | A completed run is expected to be terminal. Create a new run unless the original close was mistaken.                                   |
+| `queued` to `needs-review`   | There should be output before review is needed. Use `running` first unless importing an already-complete provider thread.              |
+| `queued` to `needs-redirect` | A run usually needs an initial attempt before redirect. Use this only when triage discovers the original prompt is unusable.           |
+| `blocked` to `needs-review`  | A blocked run normally resumes or needs redirect before review. Use only when the blocker resolution produced reviewable output.       |
+| `parked` to `blocked`        | A parked run should usually be resumed before becoming blocked. Use `needs-redirect` if the first action is to decide what to do next. |
 
 Invalid statuses are schema errors, but suspicious transitions are lint warnings because the Markdown should remain recoverable.
 
@@ -194,13 +194,13 @@ V0 does not need a `reopen` command. If one is added later, it should require a 
 
 The schema contract defines core lint severities. Transition-aware linting should add these findings:
 
-| Code | Severity | Rule |
-| --- | --- | --- |
-| `W160` | warning | Status transition is suspicious but recoverable. |
-| `W161` | warning | `done` run appears to have been reopened without an explicit reason in the timeline. |
-| `W162` | warning | `needs-review` run has neither artifacts nor a meaningful `Result / Output` summary. |
-| `W163` | warning | `blocked` run does not name a blocker in `Current State` or `Handoff Notes`. |
-| `W164` | warning | `parked` run does not explain what would make it worth resuming. |
-| `W165` | warning | `done` run still has `Result / Output` set to `Pending`. |
+| Code   | Severity | Rule                                                                                 |
+| ------ | -------- | ------------------------------------------------------------------------------------ |
+| `W160` | warning  | Status transition is suspicious but recoverable.                                     |
+| `W161` | warning  | `done` run appears to have been reopened without an explicit reason in the timeline. |
+| `W162` | warning  | `needs-review` run has neither artifacts nor a meaningful `Result / Output` summary. |
+| `W163` | warning  | `blocked` run does not name a blocker in `Current State` or `Handoff Notes`.         |
+| `W164` | warning  | `parked` run does not explain what would make it worth resuming.                     |
+| `W165` | warning  | `done` run still has `Result / Output` set to `Pending`.                             |
 
 Transition linting may require comparing the current run note to Git history or a generated registry log. When history is unavailable, tools should still apply the status-specific rules to the current file.

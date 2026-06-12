@@ -101,21 +101,21 @@ An optional single `#` title is allowed between the frontmatter and the required
 
 All required keys must be present. Some values may be `null` only where explicitly allowed.
 
-| Field | Type | Rule |
-| --- | --- | --- |
-| `id` | string | Stable unique id. Must match `^[a-z0-9][a-z0-9._-]*$` and the file stem in `agents/runs/{id}.md`. |
-| `type` | string | Must be exactly `agent-run`. |
-| `provider` | string | Lower-kebab provider value. Known V0 values are listed below. Unknown valid strings are warnings, not errors. |
-| `model` | string | Non-empty model or tool identifier. Use `unknown` when unavailable and `manual` for manual runs. |
-| `status` | string | Must be one of the V0 statuses. |
-| `project` | string | Non-empty project, repo, workspace, or initiative name. |
-| `created` | timestamp | ISO 8601 timestamp with timezone offset or `Z`. |
-| `updated` | timestamp | ISO 8601 timestamp with timezone offset or `Z`. Must not be earlier than `created`. |
-| `check` | timestamp or null | Required key. Active statuses require a timestamp. `parked` and `done` may use `null`. |
-| `next_action` | string | Non-empty concise next action. For `done`, use a completion statement such as `No action - completed`. |
-| `human_owner` | string | Non-empty person, team, or handle responsible for direction or review. |
-| `source_thread` | string or null | URL, local reference, or provider thread reference. May be `null` when unavailable. |
-| `artifacts` | list of strings | Required list. Use `[]` when there are no artifacts yet. Values may be relative paths, absolute paths, URLs, or stable references. |
+| Field           | Type              | Rule                                                                                                                               |
+| --------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `id`            | string            | Stable unique id. Must match `^[a-z0-9][a-z0-9._-]*$` and the file stem in `agents/runs/{id}.md`.                                  |
+| `type`          | string            | Must be exactly `agent-run`.                                                                                                       |
+| `provider`      | string            | Lower-kebab provider value. Known V0 values are listed below. Unknown valid strings are warnings, not errors.                      |
+| `model`         | string            | Non-empty model or tool identifier. Use `unknown` when unavailable and `manual` for manual runs.                                   |
+| `status`        | string            | Must be one of the V0 statuses.                                                                                                    |
+| `project`       | string            | Non-empty project, repo, workspace, or initiative name.                                                                            |
+| `created`       | timestamp         | ISO 8601 timestamp with timezone offset or `Z`.                                                                                    |
+| `updated`       | timestamp         | ISO 8601 timestamp with timezone offset or `Z`. Must not be earlier than `created`.                                                |
+| `check`         | timestamp or null | Required key. Active statuses require a timestamp. `parked` and `done` may use `null`.                                             |
+| `next_action`   | string            | Non-empty concise next action. For `done`, use a completion statement such as `No action - completed`.                             |
+| `human_owner`   | string            | Non-empty person, team, or handle responsible for direction or review.                                                             |
+| `source_thread` | string or null    | URL, local reference, or provider thread reference. May be `null` when unavailable.                                                |
+| `artifacts`     | list of strings   | Required list. Use `[]` when there are no artifacts yet. Values may be relative paths, absolute paths, URLs, or stable references. |
 
 ## Timestamp Rules
 
@@ -150,15 +150,15 @@ Examples:
 
 ## Status Values
 
-| Status | Active | Meaning | `check` rule |
-| --- | --- | --- | --- |
-| `queued` | Yes | Captured but not started. | Must be a timestamp. Past values warn as overdue. |
-| `running` | Yes | Actively in progress. | Must be a timestamp. Past values warn as overdue. |
-| `needs-review` | Yes | Output exists and needs human inspection. | Must be a timestamp. Past values warn as overdue. |
-| `needs-redirect` | Yes | Needs a new prompt, changed scope, or strategic decision. | Must be a timestamp. Past values warn as overdue. |
-| `blocked` | Yes | Cannot proceed without an external dependency or decision. | Must be a revisit timestamp. Past values warn as overdue. |
-| `parked` | No | Intentionally paused. | May be `null`; if present, it is a planned revisit time. |
-| `done` | No | Completed and no longer active. | Should be `null`. |
+| Status           | Active | Meaning                                                    | `check` rule                                              |
+| ---------------- | ------ | ---------------------------------------------------------- | --------------------------------------------------------- |
+| `queued`         | Yes    | Captured but not started.                                  | Must be a timestamp. Past values warn as overdue.         |
+| `running`        | Yes    | Actively in progress.                                      | Must be a timestamp. Past values warn as overdue.         |
+| `needs-review`   | Yes    | Output exists and needs human inspection.                  | Must be a timestamp. Past values warn as overdue.         |
+| `needs-redirect` | Yes    | Needs a new prompt, changed scope, or strategic decision.  | Must be a timestamp. Past values warn as overdue.         |
+| `blocked`        | Yes    | Cannot proceed without an external dependency or decision. | Must be a revisit timestamp. Past values warn as overdue. |
+| `parked`         | No     | Intentionally paused.                                      | May be `null`; if present, it is a planned revisit time.  |
+| `done`           | No     | Completed and no longer active.                            | Should be `null`.                                         |
 
 Detailed transition rules are defined in [Status Transitions](status-transitions.md). Schema validation should enforce that `status` is one of these values before any transition rules are applied.
 
@@ -186,16 +186,16 @@ Run notes must include these `##` headings in this exact order:
 
 Section expectations:
 
-| Section | Expected content |
-| --- | --- |
-| `Objective` | The intended outcome of the run. |
-| `Prompt` | Original prompt, prompt summary, or `Redacted` with a reason. |
-| `Current State` | What is true right now, including partial progress or blockers. |
-| `Result / Output` | Final or interim output. Use `Pending` while active. |
-| `Next Action` | Expanded next action. Should agree with frontmatter `next_action`. |
-| `Artifacts` | Human-readable artifact list. Should include the frontmatter artifact values when any exist. |
-| `Timeline` | Append-only timestamped events. Must have at least one entry. |
-| `Handoff Notes` | Context, cautions, and continuation guidance for the next human or agent. |
+| Section           | Expected content                                                                             |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `Objective`       | The intended outcome of the run.                                                             |
+| `Prompt`          | Original prompt, prompt summary, or `Redacted` with a reason.                                |
+| `Current State`   | What is true right now, including partial progress or blockers.                              |
+| `Result / Output` | Final or interim output. Use `Pending` while active.                                         |
+| `Next Action`     | Expanded next action. Should agree with frontmatter `next_action`.                           |
+| `Artifacts`       | Human-readable artifact list. Should include the frontmatter artifact values when any exist. |
+| `Timeline`        | Append-only timestamped events. Must have at least one entry.                                |
+| `Handoff Notes`   | Context, cautions, and continuation guidance for the next human or agent.                    |
 
 Timeline entries should use this form:
 
@@ -224,65 +224,65 @@ AgentViz linting should use three severities:
 
 ### Errors
 
-| Code | Rule |
-| --- | --- |
-| `E001` | Run file has no YAML frontmatter. |
-| `E002` | YAML frontmatter cannot be parsed. |
-| `E010` | Required frontmatter key is missing. |
-| `E011` | `type` is not `agent-run`. |
-| `E012` | `status` is not one of the V0 statuses. |
-| `E013` | `id` does not match the required format. |
-| `E014` | Duplicate `id` exists in the registry. |
-| `E015` | Run filename stem does not match frontmatter `id`. |
-| `E020` | Timestamp field is malformed or date-only. |
-| `E021` | `updated` is earlier than `created`. |
-| `E030` | Required body heading is missing or out of order. |
-| `E031` | `artifacts` is not a list of strings. |
+| Code   | Rule                                                        |
+| ------ | ----------------------------------------------------------- |
+| `E001` | Run file has no YAML frontmatter.                           |
+| `E002` | YAML frontmatter cannot be parsed.                          |
+| `E010` | Required frontmatter key is missing.                        |
+| `E011` | `type` is not `agent-run`.                                  |
+| `E012` | `status` is not one of the V0 statuses.                     |
+| `E013` | `id` does not match the required format.                    |
+| `E014` | Duplicate `id` exists in the registry.                      |
+| `E015` | Run filename stem does not match frontmatter `id`.          |
+| `E020` | Timestamp field is malformed or date-only.                  |
+| `E021` | `updated` is earlier than `created`.                        |
+| `E030` | Required body heading is missing or out of order.           |
+| `E031` | `artifacts` is not a list of strings.                       |
 | `E032` | Required scalar field is empty where `null` is not allowed. |
 
 ### Warnings
 
-| Code | Rule |
-| --- | --- |
-| `W100` | `provider` is valid kebab-case but not a known V0 provider. |
-| `W101` | Unknown frontmatter field does not use the `x_` prefix. |
-| `W110` | Active run has `check: null` or missing check value. |
-| `W111` | Active run has a `check` timestamp in the past. |
-| `W112` | Active run has placeholder `next_action`, such as `TBD`, `none`, or `n/a`. |
-| `W113` | `done` run has a non-null `check`. |
-| `W120` | `source_thread` is `null` or a placeholder for a provider run. |
-| `W130` | Run file is not linked from `agents/index.md`. |
-| `W140` | `Timeline` section is empty or has entries without timestamps. |
-| `W150` | Body `Next Action` appears to disagree with frontmatter `next_action`. |
-| `W160` | Status transition is suspicious but recoverable. |
+| Code   | Rule                                                                                 |
+| ------ | ------------------------------------------------------------------------------------ |
+| `W100` | `provider` is valid kebab-case but not a known V0 provider.                          |
+| `W101` | Unknown frontmatter field does not use the `x_` prefix.                              |
+| `W110` | Active run has `check: null` or missing check value.                                 |
+| `W111` | Active run has a `check` timestamp in the past.                                      |
+| `W112` | Active run has placeholder `next_action`, such as `TBD`, `none`, or `n/a`.           |
+| `W113` | `done` run has a non-null `check`.                                                   |
+| `W120` | `source_thread` is `null` or a placeholder for a provider run.                       |
+| `W130` | Run file is not linked from `agents/index.md`.                                       |
+| `W140` | `Timeline` section is empty or has entries without timestamps.                       |
+| `W150` | Body `Next Action` appears to disagree with frontmatter `next_action`.               |
+| `W160` | Status transition is suspicious but recoverable.                                     |
 | `W161` | `done` run appears to have been reopened without an explicit reason in the timeline. |
 | `W162` | `needs-review` run has neither artifacts nor a meaningful `Result / Output` summary. |
-| `W163` | `blocked` run does not name a blocker in `Current State` or `Handoff Notes`. |
-| `W164` | `parked` run does not explain what would make it worth resuming. |
-| `W165` | `done` run still has `Result / Output` set to `Pending`. |
+| `W163` | `blocked` run does not name a blocker in `Current State` or `Handoff Notes`.         |
+| `W164` | `parked` run does not explain what would make it worth resuming.                     |
+| `W165` | `done` run still has `Result / Output` set to `Pending`.                             |
 
 ### Info
 
-| Code | Rule |
-| --- | --- |
+| Code   | Rule                                                                 |
+| ------ | -------------------------------------------------------------------- |
 | `I200` | Filename does not use the recommended date-provider-project pattern. |
-| `I210` | Artifacts are listed in the body but not in frontmatter. |
-| `I220` | Run note has extra `##` sections beyond the required set. |
+| `I210` | Artifacts are listed in the body but not in frontmatter.             |
+| `I220` | Run note has extra `##` sections beyond the required set.            |
 
 ## Fixture Matrix
 
 Issue #3 should create fixtures based on this matrix.
 
-| Fixture path | Purpose | Expected lint |
-| --- | --- | --- |
-| `fixtures/valid/basic-workspace` | Valid registry covering Codex, Claude Code, ChatGPT, Cursor, Manus, and manual runs. | No findings. |
-| `fixtures/warnings/unknown-provider` | Valid custom provider. | `W100`. |
-| `fixtures/warnings/active-check-overdue` | Active run with past check time relative to the fixture clock. | `W111`. |
-| `fixtures/warnings/index-missing-link` | Valid run omitted from dashboard. | `W130`. |
-| `fixtures/errors/bad-status` | Invalid status. | `E012`. |
-| `fixtures/errors/missing-heading` | Missing required body section. | `E030`. |
-| `fixtures/errors/artifacts-scalar` | `artifacts` is a scalar. | `E031`. |
-| `fixtures/errors/duplicate-id` | Duplicate ids across files. | `E014`, plus `E015` for the copy whose filename cannot match the duplicate id. |
+| Fixture path                             | Purpose                                                                              | Expected lint                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `fixtures/valid/basic-workspace`         | Valid registry covering Codex, Claude Code, ChatGPT, Cursor, Manus, and manual runs. | No findings.                                                                   |
+| `fixtures/warnings/unknown-provider`     | Valid custom provider.                                                               | `W100`.                                                                        |
+| `fixtures/warnings/active-check-overdue` | Active run with past check time relative to the fixture clock.                       | `W111`.                                                                        |
+| `fixtures/warnings/index-missing-link`   | Valid run omitted from dashboard.                                                    | `W130`.                                                                        |
+| `fixtures/errors/bad-status`             | Invalid status.                                                                      | `E012`.                                                                        |
+| `fixtures/errors/missing-heading`        | Missing required body section.                                                       | `E030`.                                                                        |
+| `fixtures/errors/artifacts-scalar`       | `artifacts` is a scalar.                                                             | `E031`.                                                                        |
+| `fixtures/errors/duplicate-id`           | Duplicate ids across files.                                                          | `E014`, plus `E015` for the copy whose filename cannot match the duplicate id. |
 
 ## JSON Export Guidance
 

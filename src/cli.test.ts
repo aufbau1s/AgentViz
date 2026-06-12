@@ -12,6 +12,6 @@ describe("agentviz CLI", () => {
   it("registers the planned M2 commands", () => {
     const commandNames = createCli().commands.map((command) => command.name());
 
-    expect(commandNames).toEqual(["init", "new", "status"]);
+    expect(commandNames).toEqual(["init", "new", "status", "lint", "export"]);
   });
 });
