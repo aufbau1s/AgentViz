@@ -18,6 +18,10 @@ function assert(condition, message) {
 }
 
 const statusOutput = runCli(["status", "fixtures/valid/basic-workspace"]);
+assert(
+  statusOutput.includes("Summary: active 4 | needs-review 1 | blocked 1"),
+  "status output should include the urgency summary"
+);
 assert(statusOutput.includes("running (1)"), "status output should include running group");
 assert(
   statusOutput.includes("2026-05-24-codex-running | codex | AgentViz"),
@@ -29,6 +33,10 @@ assert(
 );
 
 const warningStatusOutput = runCli(["status", "fixtures/warnings/active-check-overdue"]);
+assert(
+  warningStatusOutput.includes("Summary: active 1 | overdue 1"),
+  "status should summarize overdue attention"
+);
 assert(
   warningStatusOutput.includes("Attention"),
   "status should include attention block for warnings"

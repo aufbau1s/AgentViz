@@ -2,7 +2,7 @@ import path from "node:path";
 import { buildJsonExport } from "./export.js";
 import { initWorkspace } from "./init.js";
 import { readRegistry } from "./registry.js";
-import { STATUSES, type Finding } from "./types.js";
+import { ACTIVE_STATUSES, STATUSES, type Finding } from "./types.js";
 import { summarizeRun, validateRegistry } from "./validation.js";
 
 export async function runInit(workspace = "."): Promise<number> {
@@ -26,12 +26,17 @@ export async function runStatus(workspace = "."): Promise<number> {
   const findings = validateRegistry(registry);
   const runs = registry.runs.map(summarizeRun);
   const findingsByRun = groupFindingsByRun(findings);
+  const activeRuns = runs.filter((run) => ACTIVE_STATUSES.includes(run.status as never));
   const overdueRuns = runs.filter((run) => hasFinding(findingsByRun, run.id, ["W111"]));
   const nextActionRuns = runs.filter((run) => hasFinding(findingsByRun, run.id, ["W112", "W150"]));
+  const summaryParts = buildStatusSummary(activeRuns, overdueRuns.length, nextActionRuns.length);
 
   if (runs.length === 0) {
     console.log("No AgentViz runs found.");
   } else {
+    console.log(`Summary: ${summaryParts.join(" | ")}`);
+    console.log("");
+
     if (overdueRuns.length > 0 || nextActionRuns.length > 0) {
       console.log("Attention");
 
@@ -162,4 +167,37 @@ function summarizeFindings(findings: Finding[], codes: string[]): string {
     .filter((finding) => codes.includes(finding.code))
     .map((finding) => labelsByCode.get(finding.code) ?? finding.code)
     .join(", ");
+}
+
+function buildStatusSummary(
+  activeRuns: Array<{ status: string }>,
+  overdueCount: number,
+  nextActionIssueCount: number
+): string[] {
+  const summaryParts = [`active ${activeRuns.length}`];
+  const reviewCount = activeRuns.filter((run) => run.status === "needs-review").length;
+  const redirectCount = activeRuns.filter((run) => run.status === "needs-redirect").length;
+  const blockedCount = activeRuns.filter((run) => run.status === "blocked").length;
+
+  if (reviewCount > 0) {
+    summaryParts.push(`needs-review ${reviewCount}`);
+  }
+
+  if (redirectCount > 0) {
+    summaryParts.push(`needs-redirect ${redirectCount}`);
+  }
+
+  if (blockedCount > 0) {
+    summaryParts.push(`blocked ${blockedCount}`);
+  }
+
+  if (overdueCount > 0) {
+    summaryParts.push(`overdue ${overdueCount}`);
+  }
+
+  if (nextActionIssueCount > 0) {
+    summaryParts.push(`next-action ${nextActionIssueCount}`);
+  }
+
+  return summaryParts;
 }
