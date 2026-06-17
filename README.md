@@ -58,7 +58,7 @@ Show run status:
 npm run dev -- status fixtures/valid/basic-workspace
 ```
 
-`agentviz status` prints a top urgency summary, then surfaces an `Attention` block for overdue checks and next-action issues before the grouped status list when warnings exist.
+`agentviz status` prints a top urgency summary, then surfaces an `Attention` block for overdue checks and next-action issues before the grouped status list when warnings exist. Within each status group, runs are ordered by finding severity first and then by earliest `check`.
 
 Validate a workspace:
 

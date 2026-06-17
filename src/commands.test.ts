@@ -45,4 +45,21 @@ describe("runStatus", () => {
     expect(output).toContain("overdue-checks (1)");
     expect(output).toContain("2026-05-24-codex-overdue-check | running | check overdue:");
   });
+
+  it("orders runs within a status group by urgency and earliest check", async () => {
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const exitCode = await runStatus("fixtures/warnings/status-ordering");
+    const outputLines = log.mock.calls.map((call) => call.join(" "));
+    const runningHeaderIndex = outputLines.findIndex((line) => line === "running (3)");
+    const firstRun = outputLines[runningHeaderIndex + 1];
+    const secondRun = outputLines[runningHeaderIndex + 2];
+    const thirdRun = outputLines[runningHeaderIndex + 3];
+
+    expect(exitCode).toBe(0);
+    expect(outputLines.join("\n")).toContain("Summary: active 3 | overdue 1");
+    expect(firstRun).toContain("2026-05-24-codex-overdue-check");
+    expect(secondRun).toContain("2026-05-24-codex-earlier-check");
+    expect(thirdRun).toContain("2026-05-24-codex-later-check");
+  });
 });

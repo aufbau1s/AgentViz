@@ -43,6 +43,19 @@ assert(
 );
 assert(warningStatusOutput.includes("overdue-checks (1)"), "status should surface overdue checks");
 
+const orderedStatusOutput = runCli(["status", "fixtures/warnings/status-ordering"]);
+const overdueIndex = orderedStatusOutput.indexOf("2026-05-24-codex-overdue-check");
+const earlierIndex = orderedStatusOutput.indexOf("2026-05-24-codex-earlier-check");
+const laterIndex = orderedStatusOutput.indexOf("2026-05-24-codex-later-check");
+assert(
+  overdueIndex !== -1 && earlierIndex !== -1 && laterIndex !== -1,
+  "status ordering fixture should include all running runs"
+);
+assert(
+  overdueIndex < earlierIndex && earlierIndex < laterIndex,
+  "status should order runs by urgency and earliest check within a status group"
+);
+
 const initWorkspace = mkdtempSync(path.join(tmpdir(), "agentviz-smoke-init-"));
 try {
   const initOutput = runCli(["init", initWorkspace]);

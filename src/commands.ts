@@ -27,8 +27,14 @@ export async function runStatus(workspace = "."): Promise<number> {
   const runs = registry.runs.map(summarizeRun);
   const findingsByRun = groupFindingsByRun(findings);
   const activeRuns = runs.filter((run) => ACTIVE_STATUSES.includes(run.status as never));
-  const overdueRuns = runs.filter((run) => hasFinding(findingsByRun, run.id, ["W111"]));
-  const nextActionRuns = runs.filter((run) => hasFinding(findingsByRun, run.id, ["W112", "W150"]));
+  const overdueRuns = sortRunsForDisplay(
+    runs.filter((run) => hasFinding(findingsByRun, run.id, ["W111"])),
+    findingsByRun
+  );
+  const nextActionRuns = sortRunsForDisplay(
+    runs.filter((run) => hasFinding(findingsByRun, run.id, ["W112", "W150"])),
+    findingsByRun
+  );
   const summaryParts = buildStatusSummary(activeRuns, overdueRuns.length, nextActionRuns.length);
 
   if (runs.length === 0) {
@@ -63,7 +69,10 @@ export async function runStatus(workspace = "."): Promise<number> {
     }
 
     for (const status of STATUSES) {
-      const runsForStatus = runs.filter((run) => run.status === status);
+      const runsForStatus = sortRunsForDisplay(
+        runs.filter((run) => run.status === status),
+        findingsByRun
+      );
 
       if (runsForStatus.length === 0) {
         continue;
@@ -169,6 +178,35 @@ function summarizeFindings(findings: Finding[], codes: string[]): string {
     .join(", ");
 }
 
+function sortRunsForDisplay<T extends { id: string; check: string | null; updated: string }>(
+  runs: T[],
+  findingsByRun: Map<string, Finding[]>
+): T[] {
+  return [...runs].sort((left, right) => {
+    const severityCompare =
+      findingSeverityRank(findingsByRun.get(left.id) ?? []) -
+      findingSeverityRank(findingsByRun.get(right.id) ?? []);
+
+    if (severityCompare !== 0) {
+      return severityCompare;
+    }
+
+    const checkCompare = compareChecks(left.check, right.check);
+
+    if (checkCompare !== 0) {
+      return checkCompare;
+    }
+
+    const updatedCompare = Date.parse(right.updated) - Date.parse(left.updated);
+
+    if (updatedCompare !== 0) {
+      return updatedCompare;
+    }
+
+    return left.id.localeCompare(right.id);
+  });
+}
+
 function buildStatusSummary(
   activeRuns: Array<{ status: string }>,
   overdueCount: number,
@@ -200,4 +238,36 @@ function buildStatusSummary(
   }
 
   return summaryParts;
+}
+
+function findingSeverityRank(findings: Finding[]): number {
+  if (findings.some((finding) => finding.severity === "error")) {
+    return 0;
+  }
+
+  if (findings.some((finding) => finding.severity === "warning")) {
+    return 1;
+  }
+
+  if (findings.some((finding) => finding.severity === "info")) {
+    return 2;
+  }
+
+  return 3;
+}
+
+function compareChecks(left: string | null, right: string | null): number {
+  if (left === right) {
+    return 0;
+  }
+
+  if (left === null) {
+    return 1;
+  }
+
+  if (right === null) {
+    return -1;
+  }
+
+  return Date.parse(left) - Date.parse(right);
 }
